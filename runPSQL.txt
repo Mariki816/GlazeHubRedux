@@ -1,0 +1,7 @@
+In order to get psql to run on heroku type this in in terminal:
+
+"source /Users/Marlene/.profile"
+
+then:
+
+"heroku pg:psql"

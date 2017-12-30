@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% block body %}
+<div class = "col-sm-2">
+	<div class = "col-sm-12" id = "recipe_list" style="outline: 3px solid #ccccff; margin-bottom:10px" >
+
+    	<label class = "control-label" for="userRecipes">
+			Recipes
+		</label>
+		{% for recipe in displayRecipes %}
+		<ul style = "margin-top: 6px" class="recipe_names">
+			<a class = "recipe_links" href = "/recipecomps/{{recipe.user_id}}/{{recipe.recipe_name }}">
+				<li>{{ recipe.recipe_name }}</li></a>
+		</ul>
+
+		{% endfor %}
+	</div>
+	<div class = "row" id = "add_recipe_button">
+		<div class = "col-sm-2">
+			<a href = "/addRecipe/{{user_id}}">
+			<button class ="btn btn-GH" id = "add_recipe">
+					<strong>Add New Recipe</strong></button>
+			</a>
+		</div>
+	</div>
+
+</div>
+
+<div class = "col-sm-10">
+
+	<div class = "row" style = "margin-top:-14px">
+		<div class = "col-sm-2">
+		<img id = "cplogo" src="/static/img/cplogo.png">
+		</div>
+		<div class = "col-sm-4" style = "margin-top:5px; margin-left:-30px">
+			<h1>Order Form</h1>
+		</div>
+	</div>
+	{% if msgSent %}
+		<div class = "row">
+			<div class = "col-sm-6" style = "margin-left:15px">
+				<h4>Order Placed. Thank you, {{userName}}!</h4>
+				<h4>You will receive a confirmation email soon</h4>
+			</div>
+		</div>
+	{% else %}
+		<div class = "row" name = "formToSend">
+			<form method="POST"
+				name="emailForm">
+
+				<div class = "row">
+
+					<div class = "col-sm-8" style = "margin-left:20px" name = "recipe">
+						<h3>{{recipeName}} - {{batchsize}} {{unitSys}}</h3>
+						<div class = "row" style = "margin-bottom:10px">
+							{% for datum in data%}
+								<div class = "col-sm-5">
+									{{datum.get('a_name')}}
+								</div>
+								<div class = "col-sm-2 text-right">
+									{{datum.get('b_percent')}}%
+								</div>
+								{% if unitSys == "lbs" %}
+									<div class = "col-sm-2 text-right">
+										{{datum.get('c_whole')}} lb
+									</div>
+									<div class = "col-sm-2 text-right">
+										{{datum.get('d_frctn')}} oz
+									</div>
+								{% else %}
+									<div class = "col-sm-2 text-right">
+										{{datum.get('c_whole')}} kg
+									</div>
+									<div class = "col-sm-2 text-right">
+										{{datum.get('d_frctn')}} grams
+									</div>
+								{% endif %}
+
+							{%endfor%}
+
+						</div>
+
+						<div class = "row">
+							<hr noshade color ="#ccccff" style = "margin-top:-5px"></hr>
+						</div>
+						<div class = "row" style = "margin-bottom: 10px">
+							<div class = "col-sm-7">
+								<h4>This is an <strong>estimate</strong> of your total cost.</h4>
+								<h4>Clay Planet will give you an exact price.</h4>
+							</div>
+								<div class = "col-sm-4">
+									<div class = "row">
+										<div class = "col-sm-6 text-right">
+											Subtotal:
+										</div>
+										<div class = "col-sm-6 text-right">
+											$ {{"%.2f" %subtotal}}
+										</div>
+
+									</div>
+
+									<div class = "row">
+										<div class = "col-sm-6 text-right">
+											Tax:
+										</div>
+										<div class = "col-sm-6 text-right">
+											{{"%.2f" %tax}}
+										</div>
+									</div>
+
+									<div class = "row">
+										<div class = "col-sm-6 text-right">
+											Shipping:
+										</div>
+										<div class = "col-sm-6 text-right">
+											{{"%.2f" %shipping}}
+										</div>
+									</div>
+
+									<div class = "row">
+										<div class = "col-sm-6 text-right">
+											Total:
+										</div>
+										<div class = "col-sm-6 text-right">
+											$ {{"%.2f" %(subtotal + tax + shipping)}}
+										</div>
+
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+						<div class = "row" style = "margin-left:1px; margin-top: 20px">
+
+							<textarea name="msgToCP" rows ="8" cols = "80"></textarea>
+
+							<button class ="btn btn-GH" style="margin-top:-25px" type = "submit" id = "sendEmail">
+								<strong>Send Email</strong>
+							</button>
+						</div>
+
+
+					</div>
+				</div>
+			</form>
+		</div>
+	{%endif%}
+
+</div>
+
+
+{% endblock %}

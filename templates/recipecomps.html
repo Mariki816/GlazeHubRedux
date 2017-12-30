@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<title>Recipe Details</title>
+
+<div class = "col-sm-2">
+	<div class = "col-sm-12" id = "recipe_list" style="outline: 3px solid #ccccff; margin-bottom:10px" >
+
+    	<label class = "control-label" for="userRecipes">
+			Recipes
+		</label>
+		{% for recipe in displayRecipes %}
+		<ul style = "margin-top: 6px" class="recipe_names">
+			<a class = "recipe_links" href = "/recipecomps/{{recipe.user_id}}/{{recipe.recipe_name }}">
+				<li>{{ recipe.recipe_name }}</li></a>
+		</ul>
+
+		{% endfor %}
+	</div>
+	<div class = "row" id = "add_recipe_button">
+		<div class = "col-sm-2">
+			<a href = "/addRecipe/{{user_id}}">
+			<button class ="btn btn-GH" id = "add_recipe">
+					<strong>Add New Recipe</strong></button>
+			</a>
+		</div>
+	</div>
+</div>
+
+	<div class = "col-sm-10" id = "recipe_section" style="margin-top:-2em">
+
+		<h1>{{ recipe_name }}</h1>
+		<div class = "col-sm-8" id = "recipe_list" >
+			<div class = "row" style = "color:#5551a2">
+
+				<div class = "col-sm-4" id = "chem_name" style = "margin-top:1em"><strong>Chemical
+					</strong>
+				</div>
+
+				<div class = "col-sm-2" id = "percentage" style = "margin-top:1em; margin-left:-1em"><strong>Percent
+					</strong>
+				</div>
+
+				<div class = "form-group" id = "amount_to_make" style = "margin-top:1em">
+					<label class = "col-sm-1 control-label" style = "margin-left: -2em" for "amt">
+						Amt.
+					</label>
+
+					<form action = "/recipecomps/{{user_id}}/{{recipe_name}}" method = "POST">
+						<div class ="col-sm-2">
+							{% if batchsize %}
+								<input class = "form-control" type = "text" id = "batchsize"
+										  name="batchsize" value = "{{batchsize}}"/>
+							{% else %}
+								<input class = "form-control" type = "text" id = "batchsize"
+										  name="batchsize" value = "0.0"/>
+							{% endif %}
+
+						</div>
+
+
+						<div class = "col-sm-2">
+
+							<input class = "radio-GH"  type = "radio" name= "unitSys" value = "lbs"
+								{{lbschecked}}/>
+							<label for "pounds">lbs</label>
+							<input class = "radio-GH" type = "radio" name= "unitSys" value = "kg"
+								{{kgchecked}}/>
+							<label for "metric">kg</label>
+						</div>
+						<div class = "col-sm-1">
+							<button class ="btn btn-GH" style="margin-top:5px" type = "submit" id = "getAmount">
+							<strong>Get Amt</strong></button>
+						</div>
+
+						<div class = "col-sm-8" id ="comp_percent_amt">
+
+						{% for comp in components %}
+							<div class = "row">
+								<div class = "col-sm-6" >{{comp.chem.chem_name}}</div>
+								<div class = "col-sm-2">{{comp.percentage}}</div>
+
+								{% if batchComp and (unitSys == "kg") %}
+									{% if wholeNumList %}
+										<div class = "col-sm-2">
+											{{wholeNumList[loop.index0]}} kg
+										</div>
+										<div class = "col-sm-2" style = "margin-left:-25px">
+											{{frctnList[loop.index0]}} g
+										</div>
+									{%endif%}
+								{% else %}
+									{% if wholeNumList %}
+										<div class = "col-sm-2">
+											{{wholeNumList[loop.index0]}} lbs
+										</div>
+										<div class = "col-sm-2" style = "margin-left:-25px">
+											{{frctnList[loop.index0]}} oz
+										</div>
+									{%endif%}
+								{% endif %}
+
+							</div>
+						{% endfor %}
+						</div>
+					</form>
+
+				</div>
+
+				<div class = "col-sm-4">
+					{% if messageToUser %}
+						{{ messageToUser}}
+					{% endif %}
+				</div>
+			</div>
+
+			<div class = "row">
+				<div class = "col-sm-8"
+					style="outline: 3px solid #ccccff; margin-top:20px; margin-left:15px;
+						margin-bottom:20px">
+					{{user_notes}}
+				</div>
+			</div>
+			<div class = "row">
+				<form action = "/editRecipe/{{user_id}}/{{recipe_name}}"
+
+					<div class = "col-sm-2">
+						<button class ="btn btn-GH" style="margin-top:15px" type = "submit" id = "editRecipe">
+						<strong>Edit Recipe</strong></button>
+					</div>
+
+
+				</form>
+
+
+
+			<div class = "row">
+				<hr noshade color ="#ccccff"></hr>
+			</div>
+
+		<form action = "/emailCP/{{user_id}}/{{recipe_name}}/{{batchsize}}">
+			<div class = "row">
+				<div class = "col-sm-3">
+					<img id = "cplogo" src="/static/img/cplogo.png">
+				</div>
+
+				<div class = "col-sm-2" style="outline: 3px solid #ccccff; margin-top:15px">
+					{%if batchsize%}
+						{{"$%.2f" %price_quote}}
+					{%else%}
+						0.00
+					{% endif %}
+				</div>
+				<div class = "col-sm-4" style="margin-top:15px">
+					Price quote. Does not include tax and shipping. U.S. orders only, please.
+				</div>
+				{% if batchsize %}
+					<div class = "col-sm-1">
+						<button class ="btn btn-GH" style="margin-top:15px; margin-left:-30px"
+							id = "order">
+						<strong>Order</strong></button>
+					</div>
+				{% endif %}
+
+			</div>
+		</form>
+
+
+	</div>
+
+
+	</div>
+
+
+
+{% endblock %}
+
+<!-- put this stuff below in a class somewhere so can keep it -->
+<!-- if batchsize
+
+	batchsize -->

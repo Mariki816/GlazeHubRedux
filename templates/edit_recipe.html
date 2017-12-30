@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+
+<title>Edit Recipe</title>
+
+<div class = "col-sm-2">
+	<div class = "col-sm-12" id = "recipe_list" style="outline: 3px solid #ccccff; margin-bottom:10px" >
+
+    	<label class = "control-label" for="userRecipes">
+			Recipes
+		</label>
+		{% for recipe in displayRecipes %}
+		<ul style = "margin-top: 6px" class="recipe_names">
+			<a class = "recipe_links" href = "/recipecomps/{{recipe.user_id}}/{{recipe.recipe_name }}">
+				<li>{{ recipe.recipe_name }}</li></a>
+		</ul>
+
+		{% endfor %}
+	</div>
+	<div class = "row" id = "add_recipe_button">
+		<div class = "col-sm-2">
+			<a href = "/addRecipe/{{user_id}}">
+			<button class ="btn btn-GH" type = "submit" id = "add_recipe">
+					<strong>Add New Recipe</strong></button>
+			</a>
+		</div>
+	</div>
+</div>
+
+
+
+
+<div class = "col-sm-10" id = "recipe_section" style="margin-top:-2em">
+	<h1>{{recipe_name}}</h1>
+	<!-- This template is hidden -->
+	<div id = "compTemplate">
+
+		<div class = "col-sm-12">
+
+		    <select class = "chemlistoptions" name="chem">
+		    	<option disabled selected> -- select a component -- </option>
+				{% for chem in chem_names %}
+					<option value="{{ chem }}">{{ chem }}</option>
+				{% endfor %}
+			</select>
+
+
+			<input class = "form-control percentage" type = "text"
+					name="percentage" value = "0.0" style = "margin-left: 20px"/>
+
+			<button class="btn btn-GH delete_comp">Delete</button>
+		</div>
+
+	</div>
+	<!-- end of hidden template -->
+
+
+
+
+
+	<form method=post>
+		<div class = "row">
+			<div class = "form-group" class = "recipename">
+				<div class = "col-sm-6">
+					<label class = "control-label" for="recipe_name" id ="recipe_name">
+						<h4>Recipe Name</h4>
+					</label>
+
+					<input class = "form-control" type = "text" id = "recipe_name"
+						name="recipe_name" value = "{{recipe_name}}"/>
+				</div>
+
+
+			</div>
+		</div>
+
+		<div id = "chemicals">
+		<div class = "row">
+			<div class = "col-sm-4">
+				<h4>Chemical Names</h4>
+			</div>
+			<div class = "col-sm-2" style="margin-left:10px">
+				<h4>Percentage</h4>
+			</div>
+		</div>
+
+
+			<div id = "chems_percents_tbl">
+
+				<div id = "chem_prcnts_bdy">
+
+					{%for comp in components %}
+					<div class = "col-sm-12">
+						<select class = "chemlistoption" name="chem">
+
+						{% for chem in chem_names%}
+							<option value="{{chem}}"
+								{% if chem == comp.chem.chem_name %}
+									selected
+								{% endif %}
+							>{{ chem }}</option>
+						{%endfor%}
+						</select>
+
+						<input class = "form-control percentage" type = "text"
+						name="percentage" value = "{{comp.percentage}}"
+						style = "margin-left: 20px"/>
+						<button class ="btn btn-GH delete_comp">Delete</button>
+					</div>
+
+					{% endfor%}
+
+				</div>
+
+
+			<div class = "col-sm-8" style = "margin-left:10px">
+				<div class ="row">
+					<button id = "add_component" class ="btn btn-GH" style="margin-top:5px; margin-left:-10px" ><strong>Add Component</strong>
+					</button>
+
+				</div>
+			</div>
+
+			<div class = "row" id = "addNotes">
+			<label class = "col-sm-8 control-label" for="userCommentslbl" id ="userCommentslbl" style = "margin-top:1em">
+				Comments: (3000 char limit)
+			</label>
+			</div>
+			<div class = "row">
+				<div class = "col-sm-8" id = "userComments">
+
+					<textarea class = "form-control" name = "user_notes" type = "text" maxlength = "3000", id = "user_notes" style = " margin-bottom:10px" value = "{{user_notes}}">{{user_notes}}</textarea>
+				</div>
+
+			</div>
+				<div class = "col-sm-4">
+					<div class = "row">
+						<form action = "/updateRecipe/{{user_id}}/{{recipe_name}}">
+								<button class ="btn btn-GH" style="margin-top:5px; " type = "submit" id = "update_recipe" value="Update Recipe">
+								<strong>Update Recipe</strong>
+								</button>
+						</form>
+					</div>
+				</div>
+				<div class = "col-sm-4">
+					<div class = "row">
+						<form action = "/deleteRecipe/{{user_id}}/{{recipe_name}}">
+								<button id = "delete_recipe" class ="btn btn-GH pull-right" style="margin-top:5px; margin-left:5px" ><strong>Delete Recipe</strong>
+								</button>
+						</form>
+					</div>
+				</div>
+
+
+				</div>
+
+		</div>
+	</form>
+
+</div>
+
+
+{% endblock %}
+

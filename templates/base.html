@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/bootstrap.css" />
+        <link rel="stylesheet" href="/static/css/style.css" />
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="/static/js/glazehub.js"></script>
+
+
+
+    </head>
+    <body>
+        <div class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <img class = "header_logo" src="/static/img/glazehublogopurple.png"><a class="navbar-brand" href="/"></a>
+                </div>
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li ><a href="mailto:glazehub@gmail.com">Contact</a></li>
+
+                        {% if session["user_id"] %}
+                            <li><a href = "/addRecipe/{{user_id}}">Add Recipe</a><li>
+                            <li ><a href="/logout"> {{"Log Out"}} </a></li>
+                        {% else %}
+                             <li ><a href="/enterRecipe">Calculator</a></li>
+                            <li ><a href="/login">{{"Log In"}}</a></li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+             {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                    <ul class="flashes">
+                        <li>{{message | safe}}</li>
+                        </ul>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+        {% block body %}
+        <div class = "col-sm-2">
+
+        {% endblock %}
+        </div>
+    </body>
+
+
+</html>

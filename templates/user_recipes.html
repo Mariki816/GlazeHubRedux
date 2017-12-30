@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+<div class = "col-sm-2">
+	<div class = "col-sm-12" id = "recipe_list" style="outline: 3px solid #ccccff; margin-bottom:10px" >
+
+    	<label class = "control-label" for="userRecipes">
+			Recipes
+		</label>
+		{% for recipe in displayRecipes %}
+		<ul style = "margin-top: 6px" class="recipe_names">
+			<a class = "recipe_links" href = "/recipecomps/{{recipe.user_id}}/{{recipe.recipe_name}}">
+				<li>{{ recipe.recipe_name }}</li></a>
+		</ul>
+
+		{% endfor %}
+	</div>
+	<div class = "row" id = "add_recipe_button">
+		<div class = "col-sm-2">
+			<a href = "/addRecipe/{{user_id}}">
+			<button class ="btn btn-GH" id = "add_recipe">
+					<strong>Add New Recipe</strong></button>
+			</a>
+		</div>
+	</div>
+</div>
+
+
+<div class = "col-sm-10" id = "welcome_section">
+	<h1>Hello, {{session["user_name"]}} </h1>
+	<p>Glaze Hub is a tool to calculate glaze batches by weight. You can also order your custom glaze from Clay Planet.</p>
+
+</div>
+
+
+
+{% endblock %}
